@@ -19,3 +19,8 @@ void _system_time_auto_plus(void)
     os_system_time++;
 }
 
+void progDelay(unsigned long ts){
+	unsigned long start = getSysTime();
+	while (getSysTime() - start < ts){;}
+}
+

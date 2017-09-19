@@ -34,7 +34,7 @@ typedef struct _event{
 	unsigned char broadcast;
 	unsigned char msg_flag;
 	OS_MESSAGE *msg;
-    void *next;
+  struct _event *next;
 }OS_EVENT;
 
 
@@ -47,4 +47,3 @@ typedef struct _handler{
 
 
 #endif /* INCFILE1_H_ */
-

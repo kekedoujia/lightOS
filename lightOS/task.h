@@ -9,16 +9,12 @@
 #define	TASK_H
 
 
-
-
-
-
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
 #include "lightOS.h"
-	
+
 #define TASK_RUN  1
 #define TASK_IDLE 0
 
@@ -32,11 +28,8 @@ OS_TASK * taskSelfHandler(void);
 void os_taskProcessing(void);
 
 
-
-
 #ifdef	__cplusplus
 }
 #endif
 
 #endif	/* TASK_H */
-

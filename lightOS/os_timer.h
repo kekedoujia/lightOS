@@ -10,7 +10,7 @@ extern "C" {
 void osTimerInit(void);
 unsigned long getSysTime(void);
 void _system_time_auto_plus(void);
-
+void progDelay(unsigned long ts);
 
 #ifdef	__cplusplus
 }
