@@ -1,8 +1,8 @@
 #include "lightOS.h"
 //#include "handle.h"
 //#include "event.h"
-#include "task.h"
-#include "watchdog.h"
+//#include "task.h"
+//#include "watchdog.h"
 
 void osSetup()
 {
@@ -23,14 +23,24 @@ void osSetup()
 
 void osRun()
 {
+#ifndef _Arduino_Platform_Application_
     while(1)
     {
+#endif
         // run each task
         os_taskProcessing();
+        os_eventHandlerProcess();
+
+#ifdef _WATCH_DOG_ENABLE_
+        watchDogFeed();
+#endif
         // working on each event
         //OS_EVENTHandlerProcess();
+#ifndef _Arduino_Platform_Application_
     }
+#endif
 }
+
 
 void osRunNoneBlock()
 {

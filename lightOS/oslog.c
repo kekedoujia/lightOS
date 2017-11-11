@@ -1,18 +1,16 @@
-#include "os_config.h"
-#include "oslog.h"
+#include "lightOS.h"
 #include <stdio.h>
 
 
+Log_Callback_Type _lightOS_log_callback_;
 
-void sysLog(char *buffer)
-{
-#ifdef _OS_LOG_ENABLE_
-      //printf("%s\n",buffer);
-	_lightOS_sysLogCallBack(buffer);
-#endif
+void setLightOS_LogCallback(Log_Callback_Type cb){
+      _lightOS_log_callback_ = cb;
 }
 
-
-void _lightOS_sysLogCallBack(char *data){
-      
+void sysLog(char *log)
+{
+#ifdef _OS_LOG_ENABLE_
+	_lightOS_log_callback_(log);
+#endif
 }

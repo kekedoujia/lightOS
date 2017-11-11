@@ -1,12 +1,10 @@
-#include "os_config.h"
 #include "lightOS.h"
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
 
-static OS_TASK *os_taskList[OS_TASK_LIST_LENGTH];
+static OS_TASK os_taskList[OS_TASK_LIST_LENGTH];
 static unsigned char os_taskStatus[OS_TASK_LIST_LENGTH];
 static OS_TASK *current_running_task;
 static unsigned int task_count;
@@ -30,18 +28,14 @@ OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsig
     if (funP)
     {
         // init task
-        new_task = (OS_TASK *)osMalloc(sizeof(OS_TASK));
+        new_task = &os_taskList[task_count++];
         new_task->taskP = funP;
         new_task->interval_time = interval;
         new_task->task_num = task_count;
         new_task->task_status = status;
         new_task->last_run_time = getSysTime();
         new_task->temp_interval_time = temp_interval;
-
-        // task add to list
-        os_taskList[task_count] = new_task;
         os_taskStatus[task_count] = 1;
-        task_count++;
 #ifdef _OS_LOG_ENABLE_
 		sprintf(log, "add task: %d\n", new_task->task_num);
 		sysLog(log);
@@ -75,7 +69,7 @@ void selfNextDutyDelay(long interval)
 	taskNow->temp_interval_time = interval;
 }
 
-OS_TASK * taskSelfHandler()
+OS_TASK *taskSelfHandler()
 {
 	return current_running_task;
 }
@@ -97,7 +91,7 @@ void os_taskProcessing()
         // there is task
         if (os_taskStatus[i]==1)
         {
-            task = os_taskList[i];
+            task = &os_taskList[i];
 #ifdef _OS_LOG_ENABLE_
     		//sprintf(log,"Task %d status : %d\n",task->task_num,task->task_status);
         	//sysLog(log);

@@ -1,16 +1,14 @@
-#include "os_config.h"
-#include <stdio.h>
 #include "lightOS.h"
 #include "string.h"
 
-static EVENT_HANDLER OS_EVENTHandlerList[OS_HANDLER_LIST_LENGTH];
-static unsigned int OS_EVENTHandler_count = 0;
+static EVENT_HANDLER os_eventHandlerList[OS_HANDLER_LIST_LENGTH];
+static unsigned int os_eventHandler_count = 0;
 
-void OS_EVENTHandlerInit()
+void os_eventHandlerInit()
 {
     int i;
-    memset((char *)OS_EVENTHandlerList,0,sizeof(OS_EVENTHandlerList));
-    OS_EVENTHandler_count = 0;
+    memset((char *)os_eventHandlerList,0,sizeof(os_eventHandlerList));
+    os_eventHandler_count = 0;
 }
 
 // pare eventType with function, return 1 success; 0 false;
@@ -20,17 +18,17 @@ EVENT_HANDLER *eventHandlerRegister(void (*handlerFun)(OS_EVENT *e),unsigned int
     EVENT_HANDLER * handler;
     // check if exesit
     //unsigned char ex = 0;
-    // handler = &OS_EVENTHandlerList[OS_EVENTHandler_count];
-    for (i = 0;i<OS_EVENTHandler_count;i++)
+    // handler = &os_eventHandlerList[os_eventHandler_count];
+    for (i = 0;i<os_eventHandler_count;i++)
     {
-        handler = &(OS_EVENTHandlerList[i]);
+        handler = &(os_eventHandlerList[i]);
         if (handler->handleP == handlerFun && handler->eventType == eventType)
         {
             return handler;
         }
     }
     // if event handler not exist
-    handler = &(OS_EVENTHandlerList[OS_EVENTHandler_count++]);
+    handler = &(os_eventHandlerList[os_eventHandler_count++]);
     // add function
     handler->handleP = handlerFun;
     // add handle event type
@@ -44,20 +42,20 @@ EVENT_HANDLER *eventHandlerRegister(void (*handlerFun)(OS_EVENT *e),unsigned int
 
 void eventHandlerEnable(unsigned int handlerNum)
 {
-    OS_EVENTHandlerList[handlerNum].handle_status = 1;
+    os_eventHandlerList[handlerNum].handle_status = 1;
 }
 
 void eventHandlerDisable(unsigned int handlerNum)
 {
-    OS_EVENTHandlerList[handlerNum].handle_status = 0;
+    os_eventHandlerList[handlerNum].handle_status = 0;
 }
 
 unsigned char eventHandlerStatus(unsigned int handlerNum)
 {
-    return OS_EVENTHandlerList[handlerNum].handle_status;
+    return os_eventHandlerList[handlerNum].handle_status;
 }
 
-void OS_EVENTHandlerProcess()
+void os_eventHandlerProcess()
 {
     int i;
 #ifdef _OS_LOG_ENABLE_
@@ -73,9 +71,9 @@ void OS_EVENTHandlerProcess()
 #ifdef _OS_DEBUG_ON_
         printf("----OS  get a event %u\n",event->eventType);
 #endif
-        for (i=0;i<OS_EVENTHandler_count;i++)
+        for (i=0;i<os_eventHandler_count;i++)
         {
-                handler = &OS_EVENTHandlerList[i];
+                handler = &os_eventHandlerList[i];
                 if (handler->handle_status == 1 && handler->eventType == event->eventType)  // handler enable and find the right handler
                 {
 #ifdef _OS_DEBUG_ON_

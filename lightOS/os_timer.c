@@ -1,6 +1,4 @@
-#include "os_config.h"
-#include "os_timer.h"
-
+#include "lightOS.h"
 
 #ifndef LIGHT_OS_USING_EXTERNAL_TIMER
 
@@ -26,6 +24,21 @@ void _system_time_auto_plus(void)
 }
 #endif
 
+#ifdef _Arduino_Platform_Application_
+#include "Arduino.h"
+
+#ifdef  __cplusplus
+extern "C" {
+#endif
+unsigned long getSysTime(void)
+{
+    return millis();
+}
+#ifdef  __cplusplus
+}
+#endif
+
+#endif
 
 
 void progDelay(unsigned long ts){

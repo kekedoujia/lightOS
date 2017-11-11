@@ -2,12 +2,22 @@
 #ifndef OS_CONFIG_H
 #define	OS_CONFIG_H
 
+
+#define _Arduino_Platform_Application_
+
 // system function shift
 //#define _WATCH_DOG_ENABLE_  1
 //#define _OS_LOG_ENABLE_     1
+//#define _OS_DEBUG_ON_
+
+
+#ifdef _Arduino_Platform_Application_
+
 #define LIGHT_OS_USING_EXTERNAL_TIMER     1
 #define LIGHT_OS_MINIMUM_TIME_UNIT_1_MS
-//#define _OS_DEBUG_ON_
+
+#endif
+
 
 
 #ifndef LIGHT_OS_MINIMUM_TIME_UNIT_1_MS
@@ -18,7 +28,7 @@
 #else
 
 #define OS_ST_PER_1_MS		1L
-#define OS_ST_PER_5_MS      5L
+#define OS_ST_PER_5_MS      OS_ST_PER_1_MS*5L
 
 #endif
 

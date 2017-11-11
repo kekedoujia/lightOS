@@ -9,14 +9,12 @@ extern "C" {
 
 #include "lightOS.h"
 
-
-
-void OS_EVENTHandlerInit(void);
+void os_eventHandlerInit(void);
 EVENT_HANDLER *eventHandlerRegister(void (*handlerFun)(OS_EVENT *e),unsigned int eventType,unsigned char status);
 void eventHandlerEnable(unsigned int handlerNum);
 void eventHandlerDisable(unsigned int handlerNum);
 unsigned char eventHandlerStatus(unsigned int handlerNum);
-void OS_EVENTHandlerProcess(void);
+void os_eventHandlerProcess(void);
 
 
 #ifdef	__cplusplus
