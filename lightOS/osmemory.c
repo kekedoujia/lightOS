@@ -1,5 +1,7 @@
 #include<stdlib.h>
+#include "os_config.h"
 #include"osmemory.h"
+
 
 void *osMalloc(unsigned int l)
 {

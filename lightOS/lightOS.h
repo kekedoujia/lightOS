@@ -5,13 +5,15 @@
 extern "C" {
 #endif
 
+
+
 #include "systypedef.h"
 #include "os_config.h"
 
 //#include "message.h"
 #include "osmemory.h"
-//#include "handle.h"
-//#include "event.h"
+#include "handle.h"
+#include "event.h"
 #include "task.h"
 #include "watchdog.h"
 #include "os_timer.h"

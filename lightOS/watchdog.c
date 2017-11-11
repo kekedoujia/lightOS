@@ -1,3 +1,6 @@
+#include "os_config.h"
+#include "watchdog.h"
+
 char dogStatus;
 
 void watchDogInit(void)

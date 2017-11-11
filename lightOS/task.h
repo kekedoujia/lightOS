@@ -13,7 +13,11 @@
 extern "C" {
 #endif
 
+#include "os_config.h"
 #include "lightOS.h"
+
+#include "systypedef.h"
+
 
 #define TASK_RUN  1
 #define TASK_IDLE 0
@@ -26,7 +30,6 @@ void taskRestart(OS_TASK *task);
 void taskPause(OS_TASK *task);
 OS_TASK * taskSelfHandler(void);
 void os_taskProcessing(void);
-
 
 #ifdef	__cplusplus
 }

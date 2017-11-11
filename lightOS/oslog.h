@@ -1,11 +1,14 @@
 #ifndef OSLOG_H
 #define	OSLOG_H
 
+
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
 #include "lightOS.h"
+#include "os_config.h"
 
 void sysLog(char *data);
 void _lightOS_sysLogCallBack(char *data);

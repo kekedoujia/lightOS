@@ -8,11 +8,12 @@
 #ifndef OS_MEMORY_H
 #define	OS_MEMORY_H
 
-#include <stdlib.h>
+#include "os_config.h"
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
+
 
 
 void *osMalloc(unsigned int l);

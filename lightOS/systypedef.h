@@ -9,33 +9,27 @@
 #ifndef _OS_TYPEDEF_H_
 #define _OS_TYPEDEF_H_
 
-
 typedef struct _task{
 	unsigned int task_num;
 	unsigned char task_status;  //1:run 2:stop
 	unsigned long last_run_time; //ms
 	unsigned long interval_time; //ms
     long temp_interval_time;
-	unsigned int (*taskP)(unsigned int opt);
-}OS_TASK;
+	unsigned int (*taskP)(int opt);
+} OS_TASK;
 
-
-typedef  struct _message{
-	unsigned int msg_len;
-	void *msg;
-}OS_MESSAGE;
-
+// typedef  struct _message{
+// 	unsigned int msg_len;
+// 	void *msg;
+// } OS_MESSAGE;
 
 typedef struct _event{
 	unsigned int eventType;
 	unsigned int event_short_inf;
-	OS_TASK *event_des_task;
-	OS_TASK *event_source_task;
-	unsigned char broadcast;
-	unsigned char msg_flag;
-	OS_MESSAGE *msg;
-  struct _event *next;
-}OS_EVENT;
+	unsigned char broadcast_flag;
+	void *msg;
+	unsigned int msg_len;
+} OS_EVENT;
 
 
 typedef struct _handler{

@@ -1,12 +1,10 @@
-#include"task.h"
-#include"osmemory.h"
-#include"oslog.h"
-#include"watchdog.h"
-#include"os_timer.h"
+#include "os_config.h"
+#include "lightOS.h"
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
 
 static OS_TASK *os_taskList[OS_TASK_LIST_LENGTH];
 static unsigned char os_taskStatus[OS_TASK_LIST_LENGTH];
@@ -16,7 +14,7 @@ static OS_TASK *taskNow;
 
 void taskInit()
 {
-	taskNow = -1;
+	taskNow = NULL;
     task_count = 0;
     memset(os_taskList,0,sizeof(os_taskList));
     memset(os_taskStatus,0,sizeof(os_taskStatus));
@@ -37,7 +35,7 @@ OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsig
         new_task->interval_time = interval;
         new_task->task_num = task_count;
         new_task->task_status = status;
-        new_task->last_run_time = 0;
+        new_task->last_run_time = getSysTime();
         new_task->temp_interval_time = temp_interval;
 
         // task add to list
@@ -69,6 +67,7 @@ void taskNextDutyDelay(OS_TASK *task,long interval)
 {
     task->temp_interval_time = interval;
     task->last_run_time = getSysTime();
+    taskRestart(task);
 }
 
 void selfNextDutyDelay(long interval)

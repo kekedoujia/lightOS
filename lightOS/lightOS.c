@@ -7,7 +7,9 @@
 void osSetup()
 {
     // init system timer
+    #ifndef LIGHT_OS_USING_EXTERNAL_TIMER
     osTimerInit();
+    #endif
     // init event handler
     //OS_EVENTHandlerInit();
 
@@ -28,4 +30,12 @@ void osRun()
         // working on each event
         //OS_EVENTHandlerProcess();
     }
+}
+
+void osRunNoneBlock()
+{
+    // run each task
+    os_taskProcessing();
+    // working on each event
+    OS_EVENTHandlerProcess();
 }
