@@ -17,5 +17,14 @@ Setup the number of TASK you will have in the application to OS_TASK_LIST_LENGTH
 
 After that , you can enjoy with lightOS.
 
+In libraries folder, there are some libraries impliment base on lightOS.
+
+LEDs -- Provides mutiple led functions, allow users to control each of these LEDs. LED can blink individuly blinks on its own         frequency.
+
+SerialInput -- A library handles the Serial input. It calls user's callback function automatically, after it detected a user                     specify header and end in the stream. 
+
+ButtonMonitor -- A library can detects short press and long press, gives user a event through callback function.
+
+
 The demo is implement on Arduino IDE for ArduinoUNO.
 
