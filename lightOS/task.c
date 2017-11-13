@@ -28,7 +28,7 @@ OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsig
     if (funP)
     {
         // init task
-        new_task = &os_taskList[task_count++];
+        new_task = &os_taskList[task_count];
         new_task->taskP = funP;
         new_task->interval_time = interval;
         new_task->task_num = task_count;
@@ -42,7 +42,8 @@ OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsig
 		sprintf(log, "task number: %d status : %d\n", new_task->task_num,new_task->task_status);
 		sysLog(log);
 #endif
-        return new_task;
+        task_count++;
+	return new_task;
     }
     return 0;
 }
