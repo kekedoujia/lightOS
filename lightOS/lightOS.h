@@ -1,27 +1,26 @@
-#ifndef LIGHTOS_H
-#define	LIGHTOS_H
+#ifndef LIGHTOS_LIGHTOS_H_
+#define LIGHTOS_LIGHTOS_H_
 
-#include "systypedef.h"
-#include "os_config.h"
-#include "osmemory.h"
-#include "handle.h"
 #include "event.h"
-#include "task.h"
-#include "watchdog.h"
+#include "handle.h"
+#include "os_config.h"
 #include "os_timer.h"
 #include "oslog.h"
+#include "osmemory.h"
+#include "systypedef.h"
+#include "task.h"
+#include "watchdog.h"
 
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-void osSetup(void);
-void osRun(void);
+void os_setup(void);
+void os_run(void);
+void os_run_non_blocking(void);
 
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* LIGHTOS_H */
-
+#endif  // LIGHTOS_LIGHTOS_H_

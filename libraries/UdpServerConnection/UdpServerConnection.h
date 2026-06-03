@@ -1,6 +1,5 @@
-// Ethernet communication
-#ifndef __UDP_SERVER_COMMUNICATION__
-#define __UDP_SERVER_COMMUNICATION__
+#ifndef LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_
+#define LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_
 
 #define UDP_PACKET_MAX_SIZE 950
 
@@ -8,36 +7,35 @@
 typedef unsigned char uint8_t;
 #endif
 
-typedef struct _upduploadmsg{
-	uint8_t version;   // Protocol version
-	uint8_t sync_code[2];   // sync code for synchronize request and response  
-	uint8_t concentrator_sn[12];
-	uint8_t trapper_sn[12];
-	uint8_t message;  // 8 bit information, represent for 8 different events
-	uint8_t checksum;
-} UDP_Upload_Msg_Type;
+typedef struct {
+  uint8_t version;
+  uint8_t sync_code[2];
+  uint8_t concentrator_sn[12];
+  uint8_t trapper_sn[12];
+  uint8_t message;
+  uint8_t checksum;
+} UdpUploadMsg;
 
-typedef struct _udpresponcemsg{
-	uint8_t version;
-	uint8_t sync_code[2];
-	uint8_t flag; // success or not
-	uint8_t command; // future control feature, keep it 0x00 on this version;
-	uint8_t checksum;
-} UDP_Responce_Msg_Type;
+typedef struct {
+  uint8_t version;
+  uint8_t sync_code[2];
+  uint8_t flag;
+  uint8_t command;
+  uint8_t checksum;
+} UdpResponseMsg;
 
-typedef struct _udpbuffer{
-	unsigned int len;
-	char data[UDP_PACKET_MAX_SIZE+1];
-} UDP_Buffer;
+typedef struct {
+  unsigned int len;
+  char data[UDP_PACKET_MAX_SIZE + 1];
+} UdpBuffer;
 
-typedef void (*UDP_Receive_Callback)(char*, int);
+typedef void (*UdpReceiveCallback)(char *data, int len);
 
-#define UDP_PACKET_MAX_SIZE	sizeof(UDP_Responce_Msg_Type)
+int udp_init(unsigned char *mac_addr, unsigned int local_port,
+             unsigned char *server_ip, unsigned int server_port,
+             UdpReceiveCallback callback);
+void udp_send_msg(UdpUploadMsg *packet);
+int udp_ready(void);
+int udp_send_data(UdpBuffer *buffer);
 
-
-int UDP_init(unsigned char *mac_addr, unsigned int local_port, unsigned char *server_ip, unsigned int server_port, UDP_Receive_Callback cb);
-void UDP_sendMsg(UDP_Upload_Msg_Type *packet);
-int UDP_ready();
-//void receiveUdpMsgCallback(char *data,int len);
-int UDP_sendData(UDP_Buffer *buf);
-#endif
+#endif  // LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_

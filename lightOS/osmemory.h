@@ -1,30 +1,15 @@
-/*
- * File:   memory.h
- * Author: JI
- *
- * Created on 2014?10?22?, ??10:13
- */
+#ifndef LIGHTOS_OSMEMORY_H_
+#define LIGHTOS_OSMEMORY_H_
 
-#ifndef OS_MEMORY_H
-#define	OS_MEMORY_H
-
-#include "os_config.h"
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
+void *os_malloc(unsigned int length);
+void os_free(void *ptr);
 
-
-void *osMalloc(unsigned int l);
-
-void osMemRelease(void *p);
-
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* MEMORY_H */
-
+#endif  // LIGHTOS_OSMEMORY_H_

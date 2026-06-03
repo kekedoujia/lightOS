@@ -1,150 +1,127 @@
 #include "lightOS.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-static OS_TASK os_taskList[OS_TASK_LIST_LENGTH];
-static unsigned char os_taskStatus[OS_TASK_LIST_LENGTH];
-static OS_TASK *current_running_task;
+static OsTask os_task_list[OS_TASK_LIST_LENGTH];
+static unsigned char os_task_status[OS_TASK_LIST_LENGTH];
+static OsTask *current_running_task;
 static unsigned int task_count;
-static OS_TASK *taskNow;
+static OsTask *current_task;
 
-void taskInit()
-{
-	taskNow = NULL;
-    task_count = 0;
-    memset(os_taskList,0,sizeof(os_taskList));
-    memset(os_taskStatus,0,sizeof(os_taskStatus));
-    current_running_task = 0;
+void task_init(void) {
+  current_task = NULL;
+  task_count = 0;
+  memset(os_task_list, 0, sizeof(os_task_list));
+  memset(os_task_status, 0, sizeof(os_task_status));
+  current_running_task = NULL;
 }
 
-//add a task
-OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsigned char status,unsigned long temp_interval)
-{
-    OS_TASK *new_task;
-	char log[50];
-	//new_task = &(os_taskStatus[task_count]);
-    if (funP)
-    {
-        // init task
-        new_task = &os_taskList[task_count];
-        new_task->taskP = funP;
-        new_task->interval_time = interval;
-        new_task->task_num = task_count;
-        new_task->task_status = status;
-        new_task->last_run_time = getSysTime();
-        new_task->temp_interval_time = temp_interval;
-        os_taskStatus[task_count] = 1;
+OsTask *task_register(unsigned int (*task_callback)(int opt),
+                      unsigned long interval, unsigned char status,
+                      long temp_interval) {
+  OsTask *new_task;
 #ifdef _OS_LOG_ENABLE_
-		sprintf(log, "add task: %d\n", new_task->task_num);
-		sysLog(log);
-		sprintf(log, "task number: %d status : %d\n", new_task->task_num,new_task->task_status);
-		sysLog(log);
+  char log[50];
 #endif
-        task_count++;
-	return new_task;
+
+  if (task_callback == NULL || task_count >= OS_TASK_LIST_LENGTH) {
+    return NULL;
+  }
+
+  new_task = &os_task_list[task_count];
+  new_task->task_callback = task_callback;
+  new_task->interval_time = interval;
+  new_task->task_num = task_count;
+  new_task->task_status = status;
+  new_task->last_run_time = os_get_time();
+  new_task->temp_interval_time = temp_interval;
+  os_task_status[task_count] = 1;
+
+#ifdef _OS_LOG_ENABLE_
+  sprintf(log, "add task: %d\n", new_task->task_num);
+  os_log(log);
+  sprintf(log, "task number: %d status : %d\n", new_task->task_num,
+          new_task->task_status);
+  os_log(log);
+#endif
+
+  task_count++;
+  return new_task;
+}
+
+void task_restart(OsTask *task) {
+  if (task == NULL) {
+    return;
+  }
+  task->task_status = TASK_RUN;
+}
+
+void task_pause(OsTask *task) {
+  if (task == NULL) {
+    return;
+  }
+  task->task_status = TASK_IDLE;
+}
+
+void task_next_duty_delay(OsTask *task, long interval) {
+  if (task == NULL) {
+    return;
+  }
+  task->temp_interval_time = interval;
+  task->last_run_time = os_get_time();
+  task_restart(task);
+}
+
+void self_next_duty_delay(long interval) {
+  if (current_task == NULL) {
+    return;
+  }
+  current_task->temp_interval_time = interval;
+}
+
+OsTask *task_self_handler(void) { return current_running_task; }
+
+void os_task_process(void) {
+  unsigned int i;
+  unsigned long delta;
+  unsigned long interval;
+  unsigned long time_now;
+  OsTask *task;
+
+  for (i = 0; i < task_count; i++) {
+    if (os_task_status[i] != 1) {
+      continue;
     }
-    return 0;
-}
 
-void taskRestart(OS_TASK *task)
-{
-    task->task_status = 1;
-}
+    task = &os_task_list[i];
+    if (task->task_status != TASK_RUN) {
+      continue;
+    }
 
-void taskPause(OS_TASK *task)
-{
-    task->task_status = 0;
-}
+    if (task->temp_interval_time >= 0) {
+      interval = task->temp_interval_time;
+    } else {
+      interval = task->interval_time;
+    }
 
-void taskNextDutyDelay(OS_TASK *task,long interval)
-{
-    task->temp_interval_time = interval;
-    task->last_run_time = getSysTime();
-    taskRestart(task);
-}
+    time_now = os_get_time();
+    delta = time_now - task->last_run_time;
+    if (delta < interval) {
+      continue;
+    }
 
-void selfNextDutyDelay(long interval)
-{
-	taskNow->temp_interval_time = interval;
-}
+    task->temp_interval_time = -1;
+    current_running_task = task;
+    task->last_run_time = os_get_time();
+    current_task = task;
+    task->task_callback(0);
+    current_task = NULL;
+    current_running_task = NULL;
 
-OS_TASK *taskSelfHandler()
-{
-	return current_running_task;
-}
-
-
-void os_taskProcessing()
-{
-#ifdef _OS_LOG_ENABLE_
-    char log[50];
-#endif
-    unsigned int i;
-    unsigned long interval = 0;
-    unsigned long delta = 0;
-    unsigned long time_now;
-	unsigned int taskDutyIndicator = 0;
-    OS_TASK *task;
-    for (i = 0;i<task_count;i++)
-    {
-        // there is task
-        if (os_taskStatus[i]==1)
-        {
-            task = &os_taskList[i];
-#ifdef _OS_LOG_ENABLE_
-    		//sprintf(log,"Task %d status : %d\n",task->task_num,task->task_status);
-        	//sysLog(log);
-#endif
-            // task status is running
-            if (task->task_status == 1)
-            {
-                if (task->temp_interval_time >= 0)
-                {
-                    interval = task->temp_interval_time;
-                }
-                else
-                {
-                    interval =  task->interval_time;
-                }
-
-                time_now = getSysTime();
-                if (time_now < task->last_run_time)
-                {
-                    delta = MAX_OS_TIMER_COUNT - (task->last_run_time - time_now);
-                }
-                else
-                {
-                    delta = time_now - task->last_run_time;
-                }
-                //4294967295
-                //until interval time
-                if (delta >= interval)
-                {
-                    task->temp_interval_time = -1;
-                    current_running_task = task;
-                    task->last_run_time = getSysTime();
-#ifdef _OS_LOG_ENABLE_
-                    //sprintf(log,"Running task: %d\n",task->task_num);
-                    //sysLog(log);
-#endif
-					taskNow = task;
-                    taskDutyIndicator += task->taskP(0);
 #ifdef _WATCH_DOG_ENABLE_
-                    watchDogFeed();
+    watchdog_feed();
 #endif
-                }
-            }
-        }
-    }
-	if (taskDutyIndicator > 0) {
-	
-	}
-	taskDutyIndicator = 0;
+  }
 }
-
-
-
-
-

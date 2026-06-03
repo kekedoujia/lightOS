@@ -1,14 +1,7 @@
-#include<stdlib.h>
-#include "os_config.h"
-#include"osmemory.h"
+#include "osmemory.h"
 
+#include <stdlib.h>
 
-void *osMalloc(unsigned int l)
-{
-    return calloc(l,1);
-}
+void *os_malloc(unsigned int length) { return calloc(length, 1); }
 
-void osMemRelease(void *p)
-{
-    free(p);
-}
+void os_free(void *ptr) { free(ptr); }

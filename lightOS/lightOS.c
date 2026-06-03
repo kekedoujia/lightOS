@@ -1,51 +1,32 @@
 #include "lightOS.h"
-//#include "handle.h"
-//#include "event.h"
-//#include "task.h"
-//#include "watchdog.h"
 
-void osSetup()
-{
-    // init system timer
-    #ifndef LIGHT_OS_USING_EXTERNAL_TIMER
-    osTimerInit();
-    #endif
-    // init event handler
-    //OS_EVENTHandlerInit();
+void os_setup(void) {
+#ifndef LIGHT_OS_USING_EXTERNAL_TIMER
+  os_timer_init();
+#endif
+
+  os_event_init();
+  os_event_handler_init();
 
 #ifdef _WATCH_DOG_ENABLE_
-    // init watch dog
-    watchDogInit();
+  watchdog_init();
 #endif
-    // init task
-    taskInit();
+
+  task_init();
 }
 
-void osRun()
-{
-#ifndef _Arduino_Platform_Application_
-    while(1)
-    {
-#endif
-        // run each task
-        os_taskProcessing();
-        os_eventHandlerProcess();
+void os_run(void) {
+  while (1) {
+    os_task_process();
+    os_event_handler_process();
 
 #ifdef _WATCH_DOG_ENABLE_
-        watchDogFeed();
+    watchdog_feed();
 #endif
-        // working on each event
-        //OS_EVENTHandlerProcess();
-#ifndef _Arduino_Platform_Application_
-    }
-#endif
+  }
 }
 
-
-void osRunNoneBlock()
-{
-    // run each task
-    os_taskProcessing();
-    // working on each event
-    OS_EVENTHandlerProcess();
+void os_run_non_blocking(void) {
+  os_task_process();
+  os_event_handler_process();
 }

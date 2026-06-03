@@ -1,48 +1,37 @@
-#pragma once
-#ifndef __BUTTON_MONITOR__
-#define __BUTTON_MONITOR__
+#ifndef LIGHTOS_LIBRARIES_BUTTON_MONITOR_H_
+#define LIGHTOS_LIBRARIES_BUTTON_MONITOR_H_
 
-
-#if ARDUINO >= 100
-#include <Arduino.h>
-#include "avr/pgmspace.h" // new include
-#else
-#include <WProgram.h>
-#include "avr/pgmspace.h" // new include
-#endif
-
+#include "../../lightOS/os_config.h"
 
 #ifndef BUTTON_NUMBER
-#define BUTTON_NUMBER	5
-#endif // !BUTTION_NUMBER
+#define BUTTON_NUMBER 5
+#endif
 
 #ifndef BUTTON_SHORT_PRESS
-#define BUTTON_SHORT_PRESS_TH OS_ST_PER_10_MS*5
-#endif // !BUTTON_SHORT_PRESS
+#define BUTTON_SHORT_PRESS_TH (OS_ST_PER_10_MS * 5)
+#endif
 
 #ifndef BUTTON_LONG_PRESS
-#define BUTTON_LONG_PRESS_TH OS_ST_PER_100_MS*30
-#endif // !BUTTON_LONG_PRESS
+#define BUTTON_LONG_PRESS_TH (OS_ST_PER_100_MS * 30)
+#endif
 
-#define BUTTON_EVENT_SHORT_PRESS		1
-#define BUTTON_EVENT_LONG_PRESS			2
+#define BUTTON_EVENT_SHORT_PRESS 1
+#define BUTTON_EVENT_LONG_PRESS 2
 
-typedef void (*Button_Event_Callback)(int, int);
+typedef void (*ButtonEventCallback)(int button, int event);
 
-typedef struct _buttontype{
-	int button;
-	char pre_status;
-	char status;
-	char event_publish;
-	unsigned long shift_time;
-} Button_Type;
+typedef struct {
+  int button;
+  char pre_status;
+  char status;
+  char event_publish;
+  unsigned long shift_time;
+} ButtonState;
 
+void button_init(ButtonEventCallback callback);
+int button_add_pin(int pin);
+void button_remove_pin(int pin);
+void button_run(void);
+void button_interrupt_handler(void);
 
-void Button_init(Button_Event_Callback cb);
-int Button_addPin(int pin);
-void Button_removePin(int pin);
-void Button_run();
-//void Button_eventCallback(int button, int event);
-void Button_interruptHandler();
-
-#endif // !__BUTTON_MONITOR__
+#endif  // LIGHTOS_LIBRARIES_BUTTON_MONITOR_H_

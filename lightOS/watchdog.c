@@ -1,27 +1,11 @@
-#include "os_config.h"
 #include "watchdog.h"
 
-char dogStatus;
+static char dog_status;
 
-void watchDogInit(void)
-{
-    dogStatus = 0;
-}
+void watchdog_init(void) { dog_status = 0; }
 
-void watchDogFeed(void)
-{
+void watchdog_feed(void) {}
 
-}
+void watchdog_enable(void) { dog_status = 1; }
 
-void watchDogEnable(void)
-{
-
-    dogStatus = 1;
-}
-
-void watchDogStop(void)
-{
-
-    dogStatus = 0;
-}
-
+void watchdog_stop(void) { dog_status = 0; }

@@ -1,25 +1,25 @@
-#ifndef OS_HANDLER_H
-#define	OS_HANDLER_H
+#ifndef LIGHTOS_HANDLE_H_
+#define LIGHTOS_HANDLE_H_
 
-#ifdef	__cplusplus
+#include "systypedef.h"
+
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 #define MSG_TYPE_SUPPORT_LENGTH 3
 
-#include "lightOS.h"
+void os_event_handler_init(void);
+OsEventHandler *os_event_handler_register(
+    void (*handler_callback)(OsEvent *event), unsigned int event_type,
+    unsigned char status);
+void os_event_handler_enable(unsigned int handler_num);
+void os_event_handler_disable(unsigned int handler_num);
+unsigned char os_event_handler_status(unsigned int handler_num);
+void os_event_handler_process(void);
 
-void os_eventHandlerInit(void);
-EVENT_HANDLER *eventHandlerRegister(void (*handlerFun)(OS_EVENT *e),unsigned int eventType,unsigned char status);
-void eventHandlerEnable(unsigned int handlerNum);
-void eventHandlerDisable(unsigned int handlerNum);
-unsigned char eventHandlerStatus(unsigned int handlerNum);
-void os_eventHandlerProcess(void);
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* HANDLE_H */
-
+#endif  // LIGHTOS_HANDLE_H_

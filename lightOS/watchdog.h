@@ -1,27 +1,17 @@
-#ifndef WATCHDOG_H
-#define	WATCHDOG_H
+#ifndef LIGHTOS_WATCHDOG_H_
+#define LIGHTOS_WATCHDOG_H_
 
-#include "os_config.h"
-#include "lightOS.h"
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
+void watchdog_init(void);
+void watchdog_feed(void);
+void watchdog_enable(void);
+void watchdog_stop(void);
 
-
-void watchDogInit(void);
-
-void watchDogFeed(void);
-
-void watchDogEnable(void);
-
-void watchDogStop(void);
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* WATCHDOG_H */
-
+#endif  // LIGHTOS_WATCHDOG_H_

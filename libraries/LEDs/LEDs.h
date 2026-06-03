@@ -1,44 +1,31 @@
-#pragma once
-#ifndef __LED_DRIVER__
-#define __LED_DRIVER__
-
-#if ARDUINO >= 100
-#include <Arduino.h>
-#include "avr/pgmspace.h" // new include
-#else
-#include <WProgram.h>
-#include "avr/pgmspace.h" // new include
-#endif
-
-#include "TrapperConfig.h"
+#ifndef LIGHTOS_LIBRARIES_LEDS_H_
+#define LIGHTOS_LIBRARIES_LEDS_H_
 
 #ifndef MAX_LED_NUMBER
-#define MAX_LED_NUMBER			5
+#define MAX_LED_NUMBER 5
 #endif
 
-#define LED_FUNCTION_IDEL		0
-#define LED_FUNCTION_ON			1
-#define LED_FUNCTION_BLINK		3
-
+#define LED_FUNCTION_IDLE 0
+#define LED_FUNCTION_ON 1
+#define LED_FUNCTION_BLINK 3
 
 typedef struct {
-	int led;
-	char status;
-	char function;
-	unsigned long interval;
-	unsigned long shift_time;
-	unsigned long expire;
-	unsigned long start_time;
-} LED_Type;
+  int led;
+  char status;
+  char function;
+  unsigned long interval;
+  unsigned long shift_time;
+  unsigned long expire;
+  unsigned long start_time;
+} LedState;
 
-void LED_init();
-int LED_run();
-int LED_add(int led);
-int LED_blink(int led, unsigned long interval, int sync, unsigned long expire);
-int LED_status(int led);
-int LED_on(int led, unsigned long expire);
-int LED_off(int led);
-void LED_offAll();
+void led_init(void);
+int led_run(void);
+int led_add(int led);
+int led_blink(int led, unsigned long interval, int sync, unsigned long expire);
+int led_status(int led);
+int led_on(int led, unsigned long expire);
+int led_off(int led);
+void led_off_all(void);
 
-
-#endif // !__LED_DRIVER__
+#endif  // LIGHTOS_LIBRARIES_LEDS_H_

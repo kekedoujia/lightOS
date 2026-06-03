@@ -1,23 +1,17 @@
-#ifndef OSLOG_H
-#define	OSLOG_H
+#ifndef LIGHTOS_OSLOG_H_
+#define LIGHTOS_OSLOG_H_
 
-#include "lightOS.h"
-#include "os_config.h"
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef void (*Log_Callback_Type)(char *);
+typedef void (*LogCallback)(char *log);
 
-void setLightOS_LogCallback(Log_Callback_Type cb); 
-void sysLog(char *data);
+void os_log_set_callback(LogCallback callback);
+void os_log(char *log);
 
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-
-
-#endif	/* OSLOG_H */
-
+#endif  // LIGHTOS_OSLOG_H_

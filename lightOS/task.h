@@ -1,38 +1,29 @@
-/*
- * File:   task.h
- * Author: JI
- *
- * Created on 2014?10?21?, ??10:32
- */
+#ifndef LIGHTOS_TASK_H_
+#define LIGHTOS_TASK_H_
 
-#ifndef TASK_H
-#define	TASK_H
+#include "os_config.h"
+#include "systypedef.h"
 
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "os_config.h"
-#include "lightOS.h"
-
-#include "systypedef.h"
-
-
-#define TASK_RUN  1
+#define TASK_RUN 1
 #define TASK_IDLE 0
 
-void taskInit(void);
-OS_TASK *taskRegister(unsigned int (*funP)(int opt),unsigned long interval,unsigned char status,unsigned long temp_interval);
-void taskNextDutyDelay(OS_TASK *task,long interval);
-void selfNextDutyDelay(long interval);
-void taskRestart(OS_TASK *task);
-void taskPause(OS_TASK *task);
-OS_TASK * taskSelfHandler(void);
-void os_taskProcessing(void);
+void task_init(void);
+OsTask *task_register(unsigned int (*task_callback)(int opt),
+                      unsigned long interval, unsigned char status,
+                      long temp_interval);
+void task_next_duty_delay(OsTask *task, long interval);
+void self_next_duty_delay(long interval);
+void task_restart(OsTask *task);
+void task_pause(OsTask *task);
+OsTask *task_self_handler(void);
+void os_task_process(void);
 
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* TASK_H */
+#endif  // LIGHTOS_TASK_H_

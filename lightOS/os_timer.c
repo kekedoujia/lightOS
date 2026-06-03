@@ -2,47 +2,25 @@
 
 #ifndef LIGHT_OS_USING_EXTERNAL_TIMER
 
-unsigned long os_system_time;
+static unsigned long os_system_time;
 
-void osTimerInit(void)
-{
-   os_system_time = 0;
-}
+void os_timer_init(void) { os_system_time = 0; }
 
+unsigned long os_get_time(void) { return os_system_time; }
 
-unsigned long getSysTime(void)
-{
-    return os_system_time;
-		//return HAL_GetTick();
-}
+void _system_time_auto_plus(void) { os_system_time++; }
 
-
-// should be used in time int every 1ms.
-void _system_time_auto_plus(void)
-{
-    os_system_time++;
-}
 #endif
 
 #ifdef _Arduino_Platform_Application_
 #include "Arduino.h"
 
-#ifdef  __cplusplus
-extern "C" {
-#endif
-unsigned long getSysTime(void)
-{
-    return millis();
-}
-#ifdef  __cplusplus
-}
-#endif
+unsigned long os_get_time(void) { return millis(); }
 
 #endif
 
-
-void progDelay(unsigned long ts){
-	unsigned long start = getSysTime();
-	while (getSysTime() - start < ts){;}
+void os_delay(unsigned long timestamp) {
+  unsigned long start = os_get_time();
+  while (os_get_time() - start < timestamp) {
+  }
 }
-
