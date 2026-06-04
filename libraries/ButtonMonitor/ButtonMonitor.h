@@ -3,6 +3,10 @@
 
 #include "../../lightOS/os_config.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef BUTTON_NUMBER
 #define BUTTON_NUMBER 5
 #endif
@@ -33,5 +37,9 @@ int button_add_pin(int pin);
 void button_remove_pin(int pin);
 void button_run(void);
 void button_interrupt_handler(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // LIGHTOS_LIBRARIES_BUTTON_MONITOR_H_

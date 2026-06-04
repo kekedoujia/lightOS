@@ -1,6 +1,10 @@
 #ifndef LIGHTOS_LIBRARIES_LEDS_H_
 #define LIGHTOS_LIBRARIES_LEDS_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef MAX_LED_NUMBER
 #define MAX_LED_NUMBER 5
 #endif
@@ -27,5 +31,9 @@ int led_status(int led);
 int led_on(int led, unsigned long expire);
 int led_off(int led);
 void led_off_all(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // LIGHTOS_LIBRARIES_LEDS_H_

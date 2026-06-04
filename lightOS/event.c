@@ -1,4 +1,7 @@
-#include "lightOS.h"
+#include "event.h"
+
+#include "os_config.h"
+#include "osmemory.h"
 
 #include <stdio.h>
 #include <string.h>

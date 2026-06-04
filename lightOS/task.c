@@ -1,7 +1,10 @@
-#include "lightOS.h"
+#include "task.h"
+
+#include "os_timer.h"
+#include "oslog.h"
+#include "watchdog.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 static OsTask os_task_list[OS_TASK_LIST_LENGTH];

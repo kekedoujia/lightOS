@@ -1,11 +1,13 @@
 #ifndef LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_
 #define LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_
 
-#define UDP_PACKET_MAX_SIZE 950
+#include <stdint.h>
 
-#ifndef uint8_t
-typedef unsigned char uint8_t;
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+#define UDP_PACKET_MAX_SIZE 950
 
 typedef struct {
   uint8_t version;
@@ -37,5 +39,9 @@ int udp_init(unsigned char *mac_addr, unsigned int local_port,
 void udp_send_msg(UdpUploadMsg *packet);
 int udp_ready(void);
 int udp_send_data(UdpBuffer *buffer);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // LIGHTOS_LIBRARIES_UDP_SERVER_CONNECTION_H_

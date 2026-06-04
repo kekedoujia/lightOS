@@ -1,4 +1,9 @@
-#include "lightOS.h"
+#include "handle.h"
+
+#include "event.h"
+#include "os_config.h"
+#include "oslog.h"
+#include "watchdog.h"
 
 #include <stdio.h>
 #include <string.h>

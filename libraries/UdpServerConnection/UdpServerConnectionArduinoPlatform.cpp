@@ -3,9 +3,13 @@
 #include "../../lightOS/os_config.h"
 
 #ifdef _Arduino_Platform_Application_
-#include "Arduino.h"
-#include "Ethernet2.h"
-#include "EthernetUdp2.h"
+#if ARDUINO >= 100
+#include <Arduino.h>
+#else
+#include <WProgram.h>
+#endif
+#include <Ethernet2.h>
+#include <EthernetUdp2.h>
 
 static EthernetUDP udp_connection;
 
